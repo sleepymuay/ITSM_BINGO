@@ -1,25 +1,59 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Random from "./random";
+import AnswersPage from "./AnswersPage";
+import AddWordPage from "./AddWordPage";
+import ModeratorPage from "./ModeratorPage";
+import Home from "./home";
+import PlayerPage from "./PlayerPage";
 
-function App() {
+const MainApp = () => {
+  const [authenticated, setAuthenticated] = useState(false);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/player" element={<PlayerPage />} />
 
-export default App;
+        <Route
+          path="/moderator"
+          element={
+            <ModeratorPage
+              setAuthenticated={setAuthenticated}
+              authenticated={authenticated}
+            />
+          }
+        />
+        <Route
+          path="/answers"
+          element={
+            authenticated ? (
+              <AnswersPage />
+            ) : (
+              <Navigate to="/moderator" replace />
+            )
+          }
+        />
+        <Route
+          path="/add-word"
+          element={
+            authenticated ? (
+              <AddWordPage />
+            ) : (
+              <Navigate to="/moderator" replace />
+            )
+          }
+        />
+        <Route
+          path="/random"
+          element={
+            authenticated ? <Random /> : <Navigate to="/moderator" replace />
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  );
+};
+
+export default MainApp;
