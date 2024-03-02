@@ -47,9 +47,7 @@ const MainApp = () => {
         />
         <Route
           path="/random"
-          element={
-            authenticated ? <Random /> : <Navigate to="/moderator" replace />
-          }
+          element={true ? <Random /> : <Navigate to="/moderator" replace />}
         />
       </Routes>
     </BrowserRouter>

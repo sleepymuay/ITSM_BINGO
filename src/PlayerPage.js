@@ -138,9 +138,9 @@ const PlayerPage = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4">
+    <div className="max-w-4xl mx-auto p-4 ">
       <h1 className="text-3xl font-bold text-center mb-4">
-        Welcome to the Player Page
+        Welcome to ITIL BUZZWORD Bingo!
       </h1>
       <div className="flex justify-center mb-4">
         <button

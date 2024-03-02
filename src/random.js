@@ -52,6 +52,7 @@ const Random = () => {
         newAnswerRef
           .set({
             answer: selectedAnswer.answer,
+            timestamp: new Date(Date.now()),
           })
           .then(() => {
             console.log("Answer added successfully:", newAnswerRef.id);
@@ -71,15 +72,21 @@ const Random = () => {
   };
 
   return (
-    <div>
-      <h1>Random Word Picker</h1>
-      <button onClick={handleClick}>Pick Random Word</button>
-      {selectedWord && (
-        <div>
-          <h2>Selected Description:</h2>
-          <p>{selectedWord}</p>
+    <div className="min-h-[65em] flex flex-col items-center justify-center bg-gray-100">
+      <div className="text-center mb-12">
+        <h1 className="text-4xl ">Random ITIL Description</h1>
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+          onClick={handleClick}
+        >
+          Random
+        </button>
+      </div>
+      <div className="flex flex-grow justify-center items-center ">
+        <div className="text-center px-8">
+          <p className="text-7xl">{selectedWord}</p>
         </div>
-      )}
+      </div>
     </div>
   );
 };
