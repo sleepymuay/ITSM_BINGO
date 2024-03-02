@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Random from "./random";
+import AnswersPage from "./AnswersPage";
+import AddWordPage from "./AddWordPage";
 import ModeratorPage from "./ModeratorPage";
 import Home from "./home";
 import PlayerPage from "./PlayerPage";
