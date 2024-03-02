@@ -17,11 +17,10 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-const firestore = firebase.firestore();
-
 const Random = () => {
   const [words, setWords] = useState([]);
   const [selectedWord, setSelectedWord] = useState(null);
+  const firestore = firebase.firestore();
 
   useEffect(() => {
     const unsubscribe = firestore.collection("words").onSnapshot((snapshot) => {
@@ -37,7 +36,7 @@ const Random = () => {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [firestore]);
 
   const handleClick = () => {
     if (words.length > 0) {

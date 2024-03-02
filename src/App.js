@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Random from "./random";
-import AnswersPage from "./AnswersPage";
-import AddWordPage from "./AddWordPage";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ModeratorPage from "./ModeratorPage";
 import Home from "./home";
 import PlayerPage from "./PlayerPage";
@@ -24,30 +21,6 @@ const MainApp = () => {
               authenticated={authenticated}
             />
           }
-        />
-        <Route
-          path="/answers"
-          element={
-            authenticated ? (
-              <AnswersPage />
-            ) : (
-              <Navigate to="/moderator" replace />
-            )
-          }
-        />
-        <Route
-          path="/add-word"
-          element={
-            authenticated ? (
-              <AddWordPage />
-            ) : (
-              <Navigate to="/moderator" replace />
-            )
-          }
-        />
-        <Route
-          path="/random"
-          element={true ? <Random /> : <Navigate to="/moderator" replace />}
         />
       </Routes>
     </BrowserRouter>
