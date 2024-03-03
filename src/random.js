@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import firebase from "firebase/compat/app";
 import "firebase/compat/firestore"; // Import Firestore
 import RealtimeTeamPage from "./RealtimeTeamPage";
+import QRCode from "qrcode.react"; // Import QRCode component
+// import qrCodeImage from "./qr-code-image.png"; // Import an image for fallback if QR code generation fails
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -72,6 +74,12 @@ const Random = () => {
 
   return (
     <div className="min-h-[65em] flex flex-col items-center justify-center bg-gray-100">
+      <div className="absolute top-20 left-0 flex flex-col items-center justify-center p-4">
+        <p className="text-lg mb-2">Scan here to join</p>
+        <a href="https://itil-bingo.vercel.app/">
+          <QRCode value="https://itil-bingo.vercel.app/" size={200} />
+        </a>
+      </div>
       <div className="text-center">
         <h1 className="text-4xl">Random ITIL Description</h1>
         <RealtimeTeamPage />

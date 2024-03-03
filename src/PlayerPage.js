@@ -202,54 +202,64 @@ const PlayerPage = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-10 mb-4">
-      <h1 className="text-3xl font-bold text-center mb-4">
-        Welcome to ITIL BUZZWORD Bingo, {teamName}!
-      </h1>
-      <div className="flex justify-center mb-4">
+    <div>
+      <nav className="bg-gray-800 p-4 flex justify-between items-center w-full mr-10">
         <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          onClick={() => window.location.reload()}
+          className={`text-white `}
+          onClick={() => (window.location = "/")}
         >
-          Randomize Card
+          Home
         </button>
-      </div>
-      <div className="text-center mb-4">
-        <span className="font-bold">Attempts Left:</span>{" "}
-        {[...Array(attemptsLeft)].map((_, index) => (
-          <span key={index}>❤️</span>
-        ))}
-      </div>
-      <div className="overflow-x-auto">
-        <table className="border-collapse border border-gray-400 mx-auto mb-4">
-          <tbody>
-            {grid.map((row, rowIndex) => (
-              <tr key={rowIndex}>
-                {row.map((word, colIndex) => {
-                  const clickedCell = clickedCells.find(
-                    (cell) => cell.row === rowIndex && cell.col === colIndex
-                  );
-                  const cellColor = clickedCell
-                    ? clickedCell.correct
-                      ? "bg-green-300"
-                      : "bg-red-300"
-                    : "bg-white";
-                  return (
-                    <td
-                      key={colIndex}
-                      onClick={() => handleClick(rowIndex, colIndex)}
-                      className={`border border-gray-400 p-4 text-center ${cellColor}  ${
-                        gameOver ? "cursor-not-allowed" : "cursor-pointer"
-                      }`}
-                    >
-                      {word}
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      </nav>
+      <div className="max-w-4xl mx-auto p-10 mb-4">
+        <h1 className="text-3xl font-bold text-center mb-4">
+          Welcome to ITIL BUZZWORD Bingo, {teamName}!
+        </h1>
+        <div className="flex justify-center mb-4">
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={() => window.location.reload()}
+          >
+            Randomize Card
+          </button>
+        </div>
+        <div className="text-center mb-4">
+          <span className="font-bold">Attempts Left:</span>{" "}
+          {[...Array(attemptsLeft)].map((_, index) => (
+            <span key={index}>❤️</span>
+          ))}
+        </div>
+        <div className="overflow-x-auto">
+          <table className="border-collapse border border-gray-400 mx-auto mb-4">
+            <tbody>
+              {grid.map((row, rowIndex) => (
+                <tr key={rowIndex}>
+                  {row.map((word, colIndex) => {
+                    const clickedCell = clickedCells.find(
+                      (cell) => cell.row === rowIndex && cell.col === colIndex
+                    );
+                    const cellColor = clickedCell
+                      ? clickedCell.correct
+                        ? "bg-green-300"
+                        : "bg-red-300"
+                      : "bg-white";
+                    return (
+                      <td
+                        key={colIndex}
+                        onClick={() => handleClick(rowIndex, colIndex)}
+                        className={`border border-gray-400 p-4 text-center ${cellColor}  ${
+                          gameOver ? "cursor-not-allowed" : "cursor-pointer"
+                        }`}
+                      >
+                        {word}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
