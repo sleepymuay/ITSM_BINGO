@@ -75,7 +75,7 @@ const Random = () => {
   return (
     <div className="min-h-[65em] flex flex-col items-center justify-center bg-gray-100">
       <div className="absolute top-20 left-0 flex flex-col items-center justify-center p-4">
-        <p className="text-lg mb-2">Scan here to join</p>
+        <p className="text-2xl mb-2 ">Scan here to join</p>
         <a href="https://itil-bingo.vercel.app/">
           <QRCode value="https://itil-bingo.vercel.app/" size={200} />
         </a>
