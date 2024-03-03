@@ -181,7 +181,7 @@ const AddWordPage = () => {
   };
 
   return (
-    <div className="min-h-[65em] flex justify-center  bg-gray-100 w-[60em]">
+    <div className="min-h-[65em]  flex justify-center  bg-gray-100 w-[60em] ">
       <div className="">
         <div className="text-center mb-12">
           <h1 className="text-4xl">Add Word Page</h1>
@@ -238,10 +238,10 @@ const AddWordPage = () => {
             <tbody>
               {words.map((word) => (
                 <tr key={word.id}>
-                  <td className="border border-gray-200 px-4 py-2 break-all">
+                  <td className="border border-gray-200 px-4 py-2 ">
                     {word.answer}
                   </td>
-                  <td className="border border-gray-200 px-4 py-2 break-all">
+                  <td className="border border-gray-200 px-4 py-2 ">
                     {word.description}
                   </td>
                   <td className="border border-gray-200 px-4 py-2 ">

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import firebase from "firebase/compat/app";
 import "firebase/compat/firestore"; // Import Firestore
+import RealtimeTeamPage from "./RealtimeTeamPage";
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -51,11 +52,9 @@ const Random = () => {
         // Store the selected answer into a new document in the Answers collection
         newAnswerRef
           .set({
+            word_id: selectedAnswer.id,
             answer: selectedAnswer.answer,
             timestamp: new Date(Date.now()),
-          })
-          .then(() => {
-            console.log("Answer added successfully:", newAnswerRef.id);
           })
           .catch((error) => {
             console.error("Error adding answer:", error);
@@ -73,8 +72,9 @@ const Random = () => {
 
   return (
     <div className="min-h-[65em] flex flex-col items-center justify-center bg-gray-100">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl ">Random ITIL Description</h1>
+      <div className="text-center">
+        <h1 className="text-4xl">Random ITIL Description</h1>
+        <RealtimeTeamPage />
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
           onClick={handleClick}
@@ -84,7 +84,7 @@ const Random = () => {
       </div>
       <div className="flex flex-grow justify-center items-center ">
         <div className="text-center px-8">
-          <p className="text-7xl">{selectedWord}</p>
+          <p className="text-7xl mb-20 -mt-20">{selectedWord}</p>
         </div>
       </div>
     </div>

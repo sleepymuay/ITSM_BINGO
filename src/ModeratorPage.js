@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
 import Swal from "sweetalert2";
@@ -11,6 +11,15 @@ const firestore = firebase.firestore();
 const ModeratorPage = ({ setAuthenticated, authenticated }) => {
   const [passkey, setPasskey] = useState("");
   const [selectedComponent, setSelectedComponent] = useState(null);
+  const [randomKey, setRandomKey] = useState(0); // state to trigger re-render of RandomPage
+  const [refreshKey, setRefreshKey] = useState(0); // state to trigger re-render of ModeratorPage
+
+  useEffect(() => {
+    // Reset selectedComponent when authenticated state changes
+    if (!authenticated) {
+      setSelectedComponent(null);
+    }
+  }, [authenticated]);
 
   const handlePasskeySubmit = async (e) => {
     e.preventDefault();
@@ -53,15 +62,32 @@ const ModeratorPage = ({ setAuthenticated, authenticated }) => {
             querySnapshot.forEach((doc) => {
               doc.ref.delete();
             });
-            console.log("All answers deleted successfully!");
             Swal.fire(
               "Deleted!",
               "All answers have been deleted successfully.",
               "success"
             );
           })
+          .then(
+            firestore
+              .collection("teams")
+              .get()
+              .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                  doc.ref.delete();
+                });
+                Swal.fire(
+                  "Deleted!",
+                  "All answers have been deleted successfully.",
+                  "success"
+                );
+                // Trigger re-render of RandomPage by updating randomKey
+                setRandomKey((prevKey) => prevKey + 1);
+                // Trigger re-render of ModeratorPage by updating refreshKey
+                setRefreshKey((prevKey) => prevKey + 1);
+              })
+          )
           .catch((error) => {
-            console.error("Error deleting answers:", error);
             Swal.fire(
               "Error!",
               "An error occurred while deleting answers.",
@@ -73,10 +99,18 @@ const ModeratorPage = ({ setAuthenticated, authenticated }) => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-100">
+    <div key={refreshKey} className="min-h-screen flex flex-col bg-gray-100">
       {authenticated && (
         <nav className="bg-gray-800 p-4 flex justify-between items-center">
           <div>
+            <button
+              className={`text-white mr-4 ${
+                selectedComponent === "Home" ? "font-bold" : ""
+              }`}
+              onClick={() => (window.location = "/")}
+            >
+              Home
+            </button>
             <button
               className={`text-white mr-4 ${
                 selectedComponent === "RandomPage" ? "font-bold" : ""
@@ -117,10 +151,12 @@ const ModeratorPage = ({ setAuthenticated, authenticated }) => {
           </h1>
         )}
         {authenticated ? (
-          <div>
+          <div className="mt-4 mb-10">
             {selectedComponent === "AddWordPage" && <AddWordPage />}
             {selectedComponent === "AnswerPage" && <AnswerPage />}
-            {selectedComponent === "RandomPage" && <RandomPage />}
+            {selectedComponent === "RandomPage" && (
+              <RandomPage key={randomKey} />
+            )}
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center">

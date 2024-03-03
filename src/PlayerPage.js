@@ -2,32 +2,59 @@ import React, { useState, useEffect } from "react";
 import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
 import Swal from "sweetalert2";
+import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const PlayerPage = () => {
   const [grid, setGrid] = useState([]);
   const [clickedCells, setClickedCells] = useState([]);
-  const [wrongAttempts, setWrongAttempts] = useState(0);
   const [gameOver, setGameOver] = useState(false);
+  const [teamName, setTeamName] = useState("");
+  const [teamId, setTeamId] = useState("");
+  const [attemptsLeft, setAttemptsLeft] = useState(); // Initialize with 3 attempts
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchWords = async () => {
-      const firestore = firebase.firestore();
-      const wordsSnapshot = await firestore.collection("words").get();
-      const wordsData = wordsSnapshot.docs.map((doc) => doc.data().answer);
-      const randomWords = getRandomWords(wordsData, 25); // Get 25 random words
-      const gridData = [];
-      for (let i = 0; i < 5; i++) {
-        const row = [];
-        for (let j = 0; j < 5; j++) {
-          row.push(randomWords.shift()); // Fill cells with random words
-        }
-        gridData.push(row);
-      }
-      setGrid(gridData);
-    };
+    const params = new URLSearchParams(location.search);
+    const teamId = params.get("teamId");
+    if (teamId) {
+      setTeamId(teamId);
+      fetchTeamData(teamId);
+      fetchWords();
+    }
+  }, [location]);
 
-    fetchWords();
-  }, []);
+  const fetchTeamData = async (teamId) => {
+    try {
+      const firestore = firebase.firestore();
+      const teamDoc = await firestore.collection("teams").doc(teamId).get();
+      if (teamDoc.exists) {
+        setTeamName(teamDoc.data().name);
+        setAttemptsLeft(teamDoc.data().attempts);
+      } else {
+        navigate(`/`);
+      }
+    } catch (error) {
+      console.error("Error fetching team data:", error);
+    }
+  };
+
+  const fetchWords = async () => {
+    const firestore = firebase.firestore();
+    const wordsSnapshot = await firestore.collection("words").get();
+    const wordsData = wordsSnapshot.docs.map((doc) => doc.data().answer);
+    const randomWords = getRandomWords(wordsData, 25); // Get 25 random words
+    const gridData = [];
+    for (let i = 0; i < 5; i++) {
+      const row = [];
+      for (let j = 0; j < 5; j++) {
+        row.push(randomWords.shift()); // Fill cells with random words
+      }
+      gridData.push(row);
+    }
+    setGrid(gridData);
+  };
 
   const getRandomWords = (wordsArray, count) => {
     const shuffled = wordsArray.sort(() => 0.5 - Math.random());
@@ -70,6 +97,7 @@ const PlayerPage = () => {
       if (querySnapshot.size > 0) {
         const hasBingo = checkBingo(newClickedCells); // Check for win condition
         if (hasBingo) {
+          await updateStatus("win");
           setGameOver(true);
           // Display SweetAlert when the game is won
           Swal.fire({
@@ -77,11 +105,18 @@ const PlayerPage = () => {
             text: "You have won the game!",
             icon: "success",
             confirmButtonText: "OK",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location = "/";
+            }
           });
         }
       } else {
-        setWrongAttempts(wrongAttempts + 1);
-        if (wrongAttempts + 1 >= 3) {
+        await setAttemptsLeft(() => attemptsLeft - 1); // Decrease attempts left
+        await updateAttempts(); // Update attempts in Firebase
+
+        if (attemptsLeft - 1 === 0) {
+          await updateStatus("lost");
           setGameOver(true);
           // Display SweetAlert when the game is over
           Swal.fire({
@@ -89,11 +124,40 @@ const PlayerPage = () => {
             text: "You lost the game!",
             icon: "error",
             confirmButtonText: "OK",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location = "/";
+            }
           });
         }
       }
     } catch (error) {
       console.error("Error getting documents: ", error);
+    }
+  };
+
+  const updateAttempts = async () => {
+    try {
+      const firestore = firebase.firestore();
+      await firestore
+        .collection("teams")
+        .doc(teamId)
+        .update({
+          attempts: attemptsLeft - 1,
+        });
+    } catch (error) {
+      console.error("Error updating attempts:", error);
+    }
+  };
+
+  const updateStatus = async (status) => {
+    try {
+      const firestore = firebase.firestore();
+      await firestore.collection("teams").doc(teamId).update({
+        status: status,
+      });
+    } catch (error) {
+      console.error("Error updating attempts:", error);
     }
   };
 
@@ -140,7 +204,7 @@ const PlayerPage = () => {
   return (
     <div className="max-w-4xl mx-auto p-10 mb-4">
       <h1 className="text-3xl font-bold text-center mb-4">
-        Welcome to ITIL BUZZWORD Bingo!
+        Welcome to ITIL BUZZWORD Bingo, {teamName}!
       </h1>
       <div className="flex justify-center mb-4">
         <button
@@ -152,7 +216,7 @@ const PlayerPage = () => {
       </div>
       <div className="text-center mb-4">
         <span className="font-bold">Attempts Left:</span>{" "}
-        {[...Array(3 - wrongAttempts)].map((_, index) => (
+        {[...Array(attemptsLeft)].map((_, index) => (
           <span key={index}>❤️</span>
         ))}
       </div>
