@@ -3,7 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
 import Swal from "sweetalert2";
+import ReactDOMServer from "react-dom/server";
 import "./Home.css";
+import AboutMePage from "./aboutme"; // Import the AboutMePage component
 
 const Home = () => {
   const [teamName, setTeamName] = useState("");
@@ -46,11 +48,20 @@ const Home = () => {
     }
   };
 
+  const handleAboutMeClick = () => {
+    const aboutMeHtml = ReactDOMServer.renderToString(<AboutMePage />);
+    Swal.fire({
+      html: aboutMeHtml,
+      showCloseButton: true,
+      showConfirmButton: false,
+    });
+  };
+
   return (
     <div className="flex flex-col items-center justify-center h-screen relative">
       <div className="absolute inset-0 z-0 bg-gradient-blue-pink animate-gradient-spin"></div>
       <div className="relative z-10">
-        <h1 className="text-8xl font-bold text-white mb-10 ">
+        <h1 className="text-8xl font-bold text-white mb-10">
           ITIL BUZZWORD BINGO
         </h1>
         <div className="flex flex-col items-center space-y-4">
@@ -65,6 +76,9 @@ const Home = () => {
           </Link>
         </div>
       </div>
+      <footer className="absolute bottom-0 left-0 w-full  text-white text-center py-4">
+        <button onClick={handleAboutMeClick}>About KPMC</button>
+      </footer>
     </div>
   );
 };
