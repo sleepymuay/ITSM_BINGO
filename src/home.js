@@ -58,15 +58,15 @@ const Home = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen relative">
+    <div className="flex flex-col items-center justify-center min-h-screen relative bg-gradient-to-r from-blue-500 to-pink-500">
       <div className="absolute inset-0 z-0 bg-gradient-blue-pink animate-gradient-spin"></div>
-      <div className="relative z-10">
-        <h1 className="text-8xl font-bold text-white mb-10">
+      <div className="relative z-10 text-center">
+        <h1 className="text-4xl md:text-6xl lg:text-8xl font-bold text-white mb-6 md:mb-10">
           ITIL BUZZWORD BINGO
         </h1>
         <div className="flex flex-col items-center space-y-4">
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-10 px-10 rounded-lg text-4xl"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-6 md:py-10 px-6 md:px-10 lg:text-4xl lg:py-10 lg:px-10 rounded-lg"
             onClick={handleStartClick}
           >
             START!

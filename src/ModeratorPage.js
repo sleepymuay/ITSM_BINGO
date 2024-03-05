@@ -51,7 +51,7 @@ const ModeratorPage = ({ setAuthenticated, authenticated }) => {
       showCancelButton: true,
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete all answers!",
+      confirmButtonText: "Reset",
     }).then((result) => {
       if (result.isConfirmed) {
         // User confirmed, proceed with deleting all answers
@@ -62,11 +62,6 @@ const ModeratorPage = ({ setAuthenticated, authenticated }) => {
             querySnapshot.forEach((doc) => {
               doc.ref.delete();
             });
-            Swal.fire(
-              "Deleted!",
-              "All answers have been deleted successfully.",
-              "success"
-            );
           })
           .then(
             firestore
@@ -76,11 +71,7 @@ const ModeratorPage = ({ setAuthenticated, authenticated }) => {
                 querySnapshot.forEach((doc) => {
                   doc.ref.delete();
                 });
-                Swal.fire(
-                  "Deleted!",
-                  "All answers have been deleted successfully.",
-                  "success"
-                );
+                Swal.fire("Done!", "Bingo have been reset!", "success");
                 // Trigger re-render of RandomPage by updating randomKey
                 setRandomKey((prevKey) => prevKey + 1);
                 // Trigger re-render of ModeratorPage by updating refreshKey
