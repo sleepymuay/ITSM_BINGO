@@ -7,15 +7,14 @@ import QRCode from "qrcode.react"; // Import QRCode component
 
 // Initialize Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyDj9BI01uYbScLVI2WK4VFI_pV6-4OJdc8",
-  authDomain: "itsm-f8633.firebaseapp.com",
-  databaseURL:
-    "https://itsm-f8633-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "itsm-f8633",
-  storageBucket: "itsm-f8633.appspot.com",
-  messagingSenderId: "723020141477",
-  appId: "1:723020141477:web:b534b89aad4f7983af4e4c",
-  measurementId: "G-J5C2WXNSPT",
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 };
 
 firebase.initializeApp(firebaseConfig);
